@@ -1,0 +1,11 @@
+{
+  "name": "wechat-sales-copilot",
+  "owner": { "name": "wechat-sales-copilot contributors" },
+  "plugins": [
+    {
+      "name": "wechat-sales-copilot",
+      "source": "./",
+      "description": "Sales copilot for your own personal WeChat on macOS (non-invasive: screenshots, on-device OCR, synthetic input)."
+    }
+  ]
+}

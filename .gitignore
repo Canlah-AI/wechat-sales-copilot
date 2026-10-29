@@ -1,0 +1,29 @@
+# Built tools
+/bin/
+# Personal data must never be committed. The scripts keep it in ~/Library/Application Support/wechat-sales-copilot/,
+# these patterns catch copies made by hand.
+contacts/
+shots/
+runs/
+outbox/
+*.jsonl
+*.csv
+*.xlsx
+ui.lock
+sender.pid
+config.toml
+denylist.txt
+allowlist.txt
+*.bak
+*.bak-*
+*.bak.*
+# Screenshots of real chats: add an image only after looking at it (tests/fixtures holds no images)
+*.png
+*.jpg
+*.jpeg
+!docs/img/*.png
+# Python / macOS
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

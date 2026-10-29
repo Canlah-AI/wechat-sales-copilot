@@ -1,0 +1,25 @@
+{
+  "_note": "Synthetic OCR lines in window points, shaped like WeChat 4.1.15's search popup. Invented names only.",
+  "web_lookalike": [
+    {"text": "Q Luna Park", "x": 40, "y": 20, "w": 120, "h": 20},
+    {"text": "Top Hits", "x": 20, "y": 70, "w": 60, "h": 14},
+    {"text": "Luna Park", "x": 60, "y": 92, "w": 80, "h": 18},
+    {"text": "Chat History", "x": 20, "y": 140, "w": 80, "h": 14},
+    {"text": "Luna Park", "x": 60, "y": 162, "w": 80, "h": 18},
+    {"text": "Internet search results", "x": 20, "y": 210, "w": 150, "h": 14},
+    {"text": "Luna Park", "x": 60, "y": 232, "w": 80, "h": 18}
+  ],
+  "only_web": [
+    {"text": "Internet search results", "x": 20, "y": 70, "w": 150, "h": 14},
+    {"text": "Luna Park", "x": 60, "y": 92, "w": 80, "h": 18}
+  ],
+  "by_weixin_id": [
+    {"text": "Contacts", "x": 20, "y": 70, "w": 60, "h": 14},
+    {"text": "Lu）", "x": 60, "y": 92, "w": 30, "h": 18},
+    {"text": "Weixin ID: luna_2024", "x": 60, "y": 112, "w": 140, "h": 14}
+  ],
+  "most_used_ellipsis": [
+    {"text": "Most used", "x": 20, "y": 70, "w": 70, "h": 14},
+    {"text": "Riverside Bakery Gro…", "x": 60, "y": 92, "w": 150, "h": 18}
+  ]
+}

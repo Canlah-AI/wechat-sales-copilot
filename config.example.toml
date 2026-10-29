@@ -1,0 +1,48 @@
+# wechat-sales-copilot settings. Copy to:
+#   ~/Library/Application Support/wechat-sales-copilot/config.toml
+# and fill in [persona]. Anything that writes messages refuses to run while a {{placeholder}} is left.
+
+[persona]
+# Who the messages come from. Only these facts go into drafts; nothing else is invented.
+sender_name = "{{your name as your contacts know you}}"
+company = "{{company name}}"
+company_one_liner = "{{one sentence: what you do and for whom}}"
+facts = ["{{a fact drafts may mention, e.g. a customer you may name}}", "{{another fact}}"]
+goal = "Introduce yourself properly to a contact you added but never really talked to, and ask one question about what they are working on."
+# Rule for the message language. Default suits Chinese-speaking contacts anywhere in the world.
+default_language_rule = "Write in Chinese for anyone who may be Chinese, including those overseas or with an English name. Use English only when nickname, remark and signature have no Chinese characters and the name is clearly not Chinese. When unsure, write Chinese."
+max_chars_zh = 90
+max_words_en = 55
+attachment_note = "No attachment follows the message."
+
+[classify]
+ideal_customers = ["{{who buys from you, e.g. consumer brands selling cross-border}}", "{{another segment}}"]
+tag_meanings = ["{{e.g. the tag 'clients' marks existing customers}}", "{{e.g. 'family' and 'close friends' are personal}}"]
+
+[ui]
+# The WeChat interface language: "en" (used on 4.1.13 / 4.1.15) or "zh" (UNTESTED, see wxmac/ui_strings.py).
+language = "en"
+
+[llm]
+# "host": the scripts write work files, Claude Code writes drafts and labels, the scripts read them back (no key).
+# "api":  call the Anthropic API directly; needs WSC_ANTHROPIC_API_KEY (or ANTHROPIC_API_KEY) in the environment.
+mode = "host"
+model = "claude-sonnet-5-5"
+
+[pacing]
+# Conservative on purpose. Volume, not spacing, is what WeChat's risk control scores; raise slowly if at all.
+window = ["09:00", "21:00"]     # local time; nothing is sent outside it
+daily_cap = 40                  # messages per day (Singapore's Spam Control Act treats 100+ similar a day as bulk)
+gap_seconds = [60, 180]         # random pause between two messages
+break_every = [15, 25]          # after this many messages...
+break_seconds = [300, 900]      # ...a longer break
+idle_seconds = 30               # act only when you have not touched mouse or keyboard for this long
+pause_hours = 24                # after any WeChat warning about your account
+screensaver_after_window = true # start the screen saver when the day's window ends and you are away
+
+[outreach]
+target_categories = ["unknown"]   # from the classifier: prospect, customer, partner, investor, peer, friend, consumer, unknown
+skip_tags = []                    # WeChat tags never messaged, e.g. ["family", "close friends"]
+require_approval = true           # send only drafts you approved (wx_outreach approve)
+card_image = ""                   # optional picture sent after each message, e.g. "~/Pictures/my-card.png"
+optout_words = ["别再发", "不要再发", "不用发", "退订", "取消", "不需要", "别打扰", "stop", "unsubscribe", "remove me", "don't message", "not interested"]

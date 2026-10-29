@@ -1,0 +1,8 @@
+{
+  "name": "wechat-sales-copilot",
+  "version": "0.1.0",
+  "description": "Sales copilot for your own personal WeChat on macOS: map your contacts into leads, draft one-to-one messages in your voice, send only what you approve at a human pace, and see who replied. Drives the official WeChat for Mac app from the outside with screenshots, on-device OCR and synthetic input; no hooking, injection or database decryption.",
+  "author": { "name": "wechat-sales-copilot contributors" },
+  "license": "Apache-2.0",
+  "keywords": ["wechat", "weixin", "sales", "crm", "macos", "ocr", "computer-use", "skills"]
+}
