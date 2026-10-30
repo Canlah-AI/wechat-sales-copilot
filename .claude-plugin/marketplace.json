@@ -1,11 +1,14 @@
 {
   "name": "wechat-sales-copilot",
-  "owner": { "name": "wechat-sales-copilot contributors" },
+  "owner": {
+    "name": "wechat-sales-copilot contributors"
+  },
   "plugins": [
     {
       "name": "wechat-sales-copilot",
       "source": "./",
       "description": "Sales copilot for your own personal WeChat on macOS (non-invasive: screenshots, on-device OCR, synthetic input)."
     }
-  ]
+  ],
+  "description": "WeChat for Mac sales copilot skills: contacts to leads, drafts in your voice, approved sends at a human pace, reply tracking."
 }

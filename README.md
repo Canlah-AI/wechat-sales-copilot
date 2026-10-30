@@ -54,8 +54,16 @@ All of it is in `config.example.toml`.
 
 ## Install
 
+In Claude Code (2.1.275+), one step:
+
+```
+/plugin install wechat-sales-copilot --marketplace Canlah-AI/wechat-sales-copilot
+```
+
+then ask Claude to "set up WeChat". By hand:
+
 ```bash
-git clone <this repo> && cd wechat-sales-copilot
+git clone https://github.com/Canlah-AI/wechat-sales-copilot && cd wechat-sales-copilot
 ./install.sh                 # builds bin/wxctl and bin/ocr (needs Xcode Command Line Tools), Python 3.11+
 python3 -m wxmac.doctor      # tells you exactly which permission or setting is missing
 ```
@@ -64,8 +72,6 @@ Then give your terminal app **Accessibility** and **Screen Recording** (System S
 optionally **Full Disk Access** for reading replies. Fill in `[persona]` in
 `~/Library/Application Support/wechat-sales-copilot/config.toml`.
 
-As a Claude Code plugin: add this repo as a marketplace (`/plugin marketplace add <path or git URL>`), install
-`wechat-sales-copilot`, then ask Claude to "set up WeChat".
 
 ## Use it right
 

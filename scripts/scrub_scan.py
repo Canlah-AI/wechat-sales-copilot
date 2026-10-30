@@ -22,6 +22,9 @@ def load(path: str) -> list[str]:
 def main() -> int:
     deny, allow, mode = sys.argv[1:4]
     allowed = {t.casefold() for t in load(allow)}  # matching is case-insensitive, so the allowlist is too
+    # an allowlist entry is also blanked out of each line before matching, so a phrase such as the repo's own
+    # "owner/name" can stay while the owner's name alone is still caught everywhere else
+    blank = re.compile("|".join(map(re.escape, sorted(load(allow), key=len, reverse=True))), re.I) if allowed else None
     terms = sorted({t for t in load(deny) if t.casefold() not in allowed}, key=len, reverse=True)
     if not terms:
         print("scrub_scan: empty denylist", file=sys.stderr)
@@ -49,6 +52,8 @@ def main() -> int:
             continue
         for n, line in enumerate(text.splitlines(), 1):
             line = unicodedata.normalize("NFKC", line)
+            if blank:
+                line = blank.sub(" ", line)
             for pat in pats:
                 for m in pat.finditer(line):
                     print(f"{path}:{n}: {m.group(0)}")

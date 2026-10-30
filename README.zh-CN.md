@@ -53,8 +53,16 @@
 
 ## 安装
 
+在 Claude Code（2.1.275 以上）里一步装好：
+
+```
+/plugin install wechat-sales-copilot --marketplace Canlah-AI/wechat-sales-copilot
+```
+
+然后跟 Claude 说「帮我装好微信技能」。手动安装：
+
 ```bash
-git clone <本仓库> && cd wechat-sales-copilot
+git clone https://github.com/Canlah-AI/wechat-sales-copilot && cd wechat-sales-copilot
 ./install.sh                 # 编译 bin/wxctl 和 bin/ocr（需要 Xcode 命令行工具），需要 Python 3.11+
 python3 -m wxmac.doctor      # 告诉你缺哪个权限、哪项设置
 ```
@@ -62,8 +70,6 @@ python3 -m wxmac.doctor      # 告诉你缺哪个权限、哪项设置
 然后在「系统设置 → 隐私与安全性」里给你的终端 App 打开**辅助功能**和**录屏**，想读回复的话再开**完全磁盘访问**。
 在 `~/Library/Application Support/wechat-sales-copilot/config.toml` 里填好 `[persona]`。
 
-作为 Claude Code 插件：把本仓库加成 marketplace（`/plugin marketplace add <路径或 git 地址>`），安装
-`wechat-sales-copilot`，然后跟 Claude 说「帮我装好微信技能」。
 
 ## 正确用法
 
