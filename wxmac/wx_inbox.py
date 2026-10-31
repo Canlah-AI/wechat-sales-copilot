@@ -42,7 +42,13 @@ def main():
     a = ap.parse_args()
     after = float(a.since_file.read_text()) if a.since_file and a.since_file.exists() else 0.0
     while True:
-        for ts, row in fetch(after, a.limit):
+        try:
+            got = list(fetch(after, a.limit))
+        except sqlite3.Error as e:
+            print(f"cannot read the notification store ({e}): give your terminal app Full Disk Access in System Settings; "
+                  "until then replies are unknown, not zero", file=sys.stderr)
+            return 2
+        for ts, row in got:
             print(json.dumps(row, ensure_ascii=False), flush=True)
             after = ts
         if a.since_file:

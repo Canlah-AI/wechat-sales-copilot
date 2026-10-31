@@ -156,7 +156,9 @@ def search_hits(lines: list[dict], chat: str, query: str) -> list[dict]:
     nearest heading above it is a chat section: an 'Internet search results' row can read exactly like the name.
     When searching by Weixin ID the row reads 'Weixin ID: <id>' even if OCR garbles the name ('Lu）' for 'Luna'):
     exactly one such row counts, and the chat header is still checked against the name after the click."""
-    headings = [l for l in lines if section(l)]
+    # only the popup's own column, and only short lines: the open chat behind the popup can carry heading words
+    # (an article's '724人收藏' put 收藏 between 群聊 and the hit), and so can chat-list previews
+    headings = [l for l in lines if section(l) and l["x"] < LIST_RIGHT and len(norm(l["text"])) <= 12]
 
     def in_chat_section(l: dict) -> bool:
         above = [h for h in headings if h["y"] < l["y"]]
@@ -176,6 +178,20 @@ def search_hits(lines: list[dict], chat: str, query: str) -> list[dict]:
     return hits
 
 
+def close_chat(chat: str, shots: Path) -> None:
+    """Click the open chat's own row once more, which closes the chat in 4.1.15. Left open, the chat marks every reply
+    that lands in it as read the next time WeChat comes forward (a lead's seven replies went read that way)."""
+    win, lines = shot("close", shots)
+    if not any(same_chat(l["text"], chat) for l in lines if l["y"] < HEADER_BAND and l["x"] > LIST_RIGHT):
+        return  # not open (or the header was not readable): never click a row that might open another chat
+    rows = sorted((l for l in lines if same_chat(l["text"], chat) and l["x"] < LIST_RIGHT and l["y"] > SEARCH_BOX_BOTTOM),
+                  key=lambda l: l["y"])
+    if rows:  # the chat just used is the most recent, so its row is the topmost with this name
+        r = rows[0]
+        ctl("click", str(win["x"] + r["x"] + r["w"] / 2), str(win["y"] + r["y"] + r["h"] / 2))
+        time.sleep(0.6)
+
+
 def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only: bool = False,
          image: Path | None = None, person: bool = False, file: Path | None = None) -> dict:
     """person=True: the header must name this person, so a group with the same name (header 'Name (3)') is refused."""
@@ -190,6 +206,7 @@ def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only
 
     front = ctl("front").strip()
     clip = ctl("clip-get")
+    opened = False
     try:
         ctl("activate")
         pause()
@@ -198,7 +215,8 @@ def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only
             # from the sidebar phone icon's menu. Never the row while that menu is open: the click only closes the menu
             ctl("key", "esc")  # close a menu left open, or the click below would toggle it shut
             pause()
-            is_ft = lambda l: norm(l["text"]) == norm(chat) and l["x"] < LIST_RIGHT and l["y"] > HEADER_BAND
+            # list rows start right under the search box: the topmost row sits above HEADER_BAND
+            is_ft = lambda l: norm(l["text"]) == norm(chat) and l["x"] < LIST_RIGHT and l["y"] > SEARCH_BOX_BOTTOM
             win, lines = shot("list", shots)
             hits = [l for l in lines if is_ft(l)]
             if any(same_chat(l["text"], chat) for l in lines if l["y"] < HEADER_BAND and l["x"] > LIST_RIGHT):
@@ -229,6 +247,7 @@ def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only
         if not any(same_person(l["text"], chat) if person else same_chat(l["text"], chat) for l in header):
             ctl("key", "esc")
             raise Abort(f"chat header is {[l['text'] for l in header]}, not {chat!r}")
+        opened = True
         if open_only:
             return {"status": "opened", "chat": chat}
 
@@ -305,6 +324,13 @@ def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only
             pause(0.9, 1.4)
             if kind == "file" or not text:
                 win, lines = shot(f"{kind}-pasted", shots)
+            if kind == "file" and not text:
+                # the box starts at the pasted file's chip, the lowest line naming the file: the default INPUT_TOP sits
+                # above 4.1.15's box and cut the newest bubble out of the check (every file-only send read unconfirmed)
+                chip = [l["y"] for l in lines if l["x"] > LIST_RIGHT and l["y"] > win["h"] / 2
+                        and any(p in key(l["text"]) for p in pieces(path.name, 4))]
+                if chip:
+                    box_top = max(chip) - 8
             if kind == "file" and named(lines) <= named(seen):
                 # nothing new carries the file name: the paste did not take, so pressing Send would send nothing
                 ctl("key", "cmd+a")
@@ -333,6 +359,11 @@ def send(chat: str, text: str, dry_run: bool, shots: Path, query: str, open_only
         return {"status": "sent", "chat": chat, "screen": screen,
                 **({"image": image.name} if image else {}), **({"file": file.name} if file else {})}
     finally:
+        if opened and not open_only:
+            try:
+                close_chat(chat, shots)
+            except Exception:
+                pass  # closing is a courtesy to the unread marks; the send result stands either way
         ctl("clip-set", clip)
         if front and front not in (WECHAT, "com.apple.loginwindow"):
             subprocess.run([WXCTL, "activate", front], capture_output=True)

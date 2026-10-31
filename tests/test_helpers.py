@@ -65,6 +65,16 @@ class Search(unittest.TestCase):
         self.assertEqual(len(hits), 1)
 
 
+    def test_heading_words_in_the_open_chat_behind_the_popup_are_ignored(self):
+        # an article in the chat pane reads '724人收藏'; 收藏 is a non-chat section heading, and it sits between 群聊
+        # and the hit by height, but it is far right of the popup's column
+        lines = [{"text": "群聊", "x": 83, "y": 54, "w": 30, "h": 14},
+                 {"text": "724人收藏", "x": 984, "y": 90, "w": 60, "h": 15},
+                 {"text": "Sunrise Founders Club", "x": 126, "y": 100, "w": 150, "h": 15}]
+        self.assertEqual([h["text"] for h in search_hits(lines, "Sunrise Founders Club", "Sunrise Founders Club")],
+                         ["Sunrise Founders Club"])
+
+
 class Outreach(unittest.TestCase):
     def test_warning_about_recipient_is_not_ours(self):
         self.assertIsNone(warning_in("The user's account is restricted. Unable to send message."))

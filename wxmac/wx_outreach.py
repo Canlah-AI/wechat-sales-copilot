@@ -70,6 +70,15 @@ def save_queue(q: list[dict]):
     tmp.replace(QUEUE)
 
 
+def notify_readable() -> bool:
+    """False without Full Disk Access: reply counts are then unknown, which must never be printed as 0."""
+    try:
+        sqlite3.connect(f"file:{NOTIFY_DB}?mode=ro", uri=True).execute("select 1 from record limit 1")
+        return True
+    except sqlite3.Error:
+        return False
+
+
 def notifications(days: int) -> list[tuple[str, datetime.datetime, str]]:
     """(normalised chat name, time, preview) of WeChat notifications in the last `days` days.
     Needs Full Disk Access for the app running this; without it the list is empty (no recent-chat filter,
@@ -348,10 +357,12 @@ def status():
     sent = {key(r["chat"]): datetime.datetime.fromisoformat(r["time"]) for r in rows if r["status"].startswith("sent")}
     replied = {k for k, t, _ in notifications(60) if k in sent and t > sent[k]}
     print(f"queue {by}; sent today {sum(1 for r in rows if r['time'].startswith(today) and r['status'].startswith('sent'))}"
-          f"/{P('daily_cap', 40)}; sent in all {len(sent)}; replied after our message {len(replied)}; "
-          f"opted out {len(optouts())}")
-    if not NOTIFY_DB.exists() or not notifications(60):
-        print("replies: unreadable or none (needs Full Disk Access for the terminal app running this)")
+          f"/{P('daily_cap', 40)}; sent in all {len(sent)}; "
+          + (f"replied after our message {len(replied)}; " if notify_readable() else
+             "replies UNKNOWN (no Full Disk Access; not zero); ")
+          + f"opted out {len(optouts())}")
+    if not notify_readable():
+        print("replies: unreadable (give the terminal app running this Full Disk Access)")
 
 
 def main():
