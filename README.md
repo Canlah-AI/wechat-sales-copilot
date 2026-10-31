@@ -9,8 +9,9 @@ re-signing, no protocol emulation, no decryption of WeChat's database.
 
 [中文说明](README.zh-CN.md)
 
-> **Status: v0.1, early.** Used on WeChat for Mac 4.1.13 and 4.1.15 with an **English** interface. The Chinese
-> interface is **untested** (the labels are in `wxmac/ui_strings.py`; please report what you see). macOS 13+ only.
+> **Status: v0.1, early.** Used on WeChat for Mac 4.1.13 and 4.1.15 with an **English** interface. With a **Chinese**
+> interface (4.1.15), sending, search and File Transfer are verified; contacts capture and card reading are not yet
+> (the labels are in `wxmac/ui_strings.py`; please report what you see). macOS 13+ only.
 
 ## What it does
 

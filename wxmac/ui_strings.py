@@ -1,8 +1,9 @@
 """The words WeChat for Mac shows, per interface language. The scripts find buttons and sections by reading them.
 
-STATUS: "en" was used on WeChat for Mac 4.1.13 and 4.1.15 with an English interface. "zh" (简体中文) is UNTESTED:
-the labels below are the expected Chinese wording, not read off a real screen yet. Check them with
-`python3 -m wxmac.doctor --ocr` on a Chinese interface before relying on contacts capture or card reading.
+STATUS: "en" was used on WeChat for Mac 4.1.13 and 4.1.15 with an English interface. "zh" (简体中文) was read off a
+Chinese 4.1.15 interface for sending: chat_sections, other_sections and file_transfer. The rest of "zh" (the contacts
+table, card labels and buttons, folded sections, manage_contacts) is the expected wording, not verified yet: check
+with `python3 -m wxmac.doctor --ocr` on a Chinese interface before relying on contacts capture or card reading.
 Matching compares text with all whitespace removed (OCR spaces words unpredictably).
 
 Where both languages can safely be accepted at once (search sections, card prefixes), both are; where a word
@@ -26,7 +27,7 @@ UI = {
         "card_buttons": {"Messag", "es", "Messages", "Voice", "Video", "Call", "〇"},
         "yesterday": "Yesterday",
     },
-    "zh": {  # UNTESTED
+    "zh": {  # sending verified on 4.1.15; contacts and card labels unverified
         "chat_sections": {"最常使用", "联系人", "群聊", "最佳匹配"},
         "other_sections": {"聊天记录", "网络搜索结果", "搜一搜", "公众号", "视频号", "小程序", "收藏"},
         "file_transfer": {"文件传输助手"},

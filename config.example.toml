@@ -20,7 +20,8 @@ ideal_customers = ["{{who buys from you, e.g. consumer brands selling cross-bord
 tag_meanings = ["{{e.g. the tag 'clients' marks existing customers}}", "{{e.g. 'family' and 'close friends' are personal}}"]
 
 [ui]
-# The WeChat interface language: "en" (used on 4.1.13 / 4.1.15) or "zh" (UNTESTED, see wxmac/ui_strings.py).
+# The WeChat interface language: "en" (used on 4.1.13 / 4.1.15) or "zh" (sending verified on 4.1.15; contacts capture
+# unverified, see wxmac/ui_strings.py). `python3 -m wxmac.doctor --ocr` tells you which one is on screen.
 language = "en"
 
 [llm]

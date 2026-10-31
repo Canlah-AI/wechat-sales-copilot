@@ -76,7 +76,7 @@ def main() -> int:
             check(True, "persona filled in")
         except SystemExit as e:
             check(False, "persona filled in", str(e))
-    check(lang() in ("en", "zh"), f"[ui] language = {lang()}" + ("  (Chinese interface: UNTESTED)" if lang() == "zh" else ""))
+    check(lang() in ("en", "zh"), f"[ui] language = {lang()}" + ("  (Chinese interface: contacts capture unverified)" if lang() == "zh" else ""))
     if a.ocr and running and built:
         win = json.loads(run(str(wxctl), "win") or "{}")
         png = config.DATA / "shots" / "doctor.png"

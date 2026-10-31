@@ -19,7 +19,7 @@ python3 -m wxmac.wx_contacts_dump --idle 60
 
 It acts only after 60 s without mouse or keyboard input and pauses the moment the user comes back, resuming from
 the same row. It only scrolls: **never click a row in that table** (RULES 5). About 6,000 contacts take a few hours
-of idle time. Output `all_contacts.jsonl`; progress in `dump.log`. Chinese interface: untested (table header names
+of idle time. Output `all_contacts.jsonl`; progress in `dump.log`. Chinese interface: unverified (table header names
 come from `wxmac/ui_strings.py`); if it stops with "table header not found", check `[ui] language`.
 
 ## 2. Label

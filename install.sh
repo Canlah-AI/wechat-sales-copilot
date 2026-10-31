@@ -12,8 +12,15 @@ for t in wxctl ocr; do
   swiftc -O -o "bin/$t.new" "native/$t.swift"
   mv "bin/$t.new" "bin/$t"
 done
-python3 -m pip install --quiet --user -r requirements.txt 2>/dev/null \
-  || echo "note: pip install -r requirements.txt failed; contacts capture and the Excel export need Pillow and openpyxl"
+# sending, outreach and inbox need only the standard library; Pillow and openpyxl are for contacts capture and Excel
+if ! out=$(python3 -m pip install --quiet --user -r requirements.txt 2>&1); then
+  if grep -q externally-managed <<<"$out"; then
+    echo "note: this Python (Homebrew's) refuses pip installs. For contacts capture and the Excel export, run"
+    echo "      python3 -m pip install --user --break-system-packages -r requirements.txt   (your user folder only)"
+  else
+    echo "note: pip install -r requirements.txt failed; contacts capture and the Excel export need Pillow and openpyxl"
+  fi
+fi
 DATA="${WSC_DATA_DIR:-$HOME/Library/Application Support/wechat-sales-copilot}"
 mkdir -p "$DATA"
 chmod 700 "$DATA"

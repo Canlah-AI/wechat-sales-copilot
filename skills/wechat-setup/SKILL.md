@@ -35,8 +35,8 @@ only and every name "does not match": that is the commonest first failure.
 `~/Library/Application Support/wechat-sales-copilot/config.toml` (created from `config.example.toml`).
 Ask the user for: their name as contacts know them, company, one-line description, a few facts drafts may use, who
 buys from them, what their WeChat tags mean. Fill `[persona]` and `[classify]`. Set `[ui] language` to the WeChat
-interface language: `en` is tested; `zh` is **untested** (say so; run `python3 -m wxmac.doctor --ocr` to confirm the
-language on screen). Leave `[pacing]` at the defaults unless the user insists.
+interface language: `en` is tested; with `zh`, sending is tested but contacts capture is **unverified** (say so; run
+`python3 -m wxmac.doctor --ocr` to confirm the language on screen). Leave `[pacing]` at the defaults unless the user insists.
 
 ## 4. Calibrate the window
 
